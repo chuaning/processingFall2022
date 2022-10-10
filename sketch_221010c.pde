@@ -24,6 +24,10 @@ int x12=800;
 int y12=400;
 int x13=800;
 int y13=700;
+int a=1;
+int b=0;
+int c=0;
+int d=0;
 
 void setup(){
   size(1000,800);
@@ -35,7 +39,12 @@ void draw(){
   fill(255);
  // y3=mouseY;
   drawline();
-  
+  if(mouseX>400){
+    a=d=0;b=c=1;}
+    else if(mouseY>400){
+      a=b=0;c=d=1;}
+      else{
+        a=1;b=c=d=0;}
   colorrect();
   
 }
@@ -58,15 +67,15 @@ void drawline(){
   
 }
 void colorrect(){
-  fill(255,0,0);
+  fill(255*a,255*a,255*c);
   rect(x1,y1,x6-x1,y6-y1);
   rect(x6,y3,x10-x6,y10-y3);
   rect(x11,0,1000-x11,y11);
-  fill(255,255,0);
+  fill(255,255*b,0);
   rect(0,y2,x3,y3-y2);
   rect(x4,y4,x7-x4,800-y4);
   rect(x8,y8,x12-x8,y12-y8);
-  fill(0,0,255);
+  fill(255*c,255*d,255*a);
   rect(0,y1,x2,y2-y1);
   rect(0,y4,x4,800-y4);
   rect(x12,y12,1000-x12,y13-y12);
