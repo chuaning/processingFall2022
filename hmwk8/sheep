@@ -1,0 +1,86 @@
+class sheep{
+  PVector loc;
+  float ve;//速度大小
+  PVector direction;//速度方向
+  PVector velo;//速度向量
+  float r=30;
+  float maxspeed=10;//???怎么不管用呢
+  float fitness;
+  //color colorball;
+  //float lifespan=500;
+  boolean life;
+  PImage asheep;
+  sheep(float vel){
+    ve=vel;
+    initial();
+  }
+  sheep(){
+    ve=random(2,3);
+    //initial();
+    life=true;
+    //life=false;
+    loc=new PVector(random(width),random(height));
+    direction=new PVector(sin(random(2*PI)),cos(random(2*PI)));
+    velo=new PVector(sin(random(2*PI)),cos(random(2*PI)));
+    velo.mult(ve);
+    velo.limit(maxspeed);
+  }
+  void initial(){
+    life=true;
+    loc=new PVector(random(width),random(height));
+    direction=new PVector(sin(random(2*PI)),cos(random(2*PI)));
+    velo=new PVector(sin(random(2*PI)),cos(random(2*PI)));
+    velo.mult(ve);
+    velo.limit(maxspeed);
+  }
+  void update(){
+    if(life==true){
+    loc.add(velo);
+    }
+    else{fitness=0;}
+    velo.limit(maxspeed);
+    borders();
+  }
+   void borders() {
+    if (loc.x + r < 0) {
+      loc.x = width + r; 
+      //vel.x*=-1;
+    }
+    if (loc.y + r < 0) {
+      loc.y = height + r; 
+      //vel.y*=-1;
+    }
+    if (loc.x - r > width) {
+      loc.x = - r; 
+      //vel.x*=-1;
+    }
+    if (loc.y - r > height) {
+      loc.y = -r; 
+      //vel.y*=-1;
+    }
+  }
+  void run(ArrayList wolves){
+    float desiredseparation = r;
+    //PVector steer = new PVector(0,0,0);
+    for (int i = 0 ; i < wolves.size(); i++) {
+      wolf other=(wolf)wolves.get(i);
+      float d = PVector.dist(loc,other.loc);
+      if ((d > 10) && (d < desiredseparation)) {
+        PVector diff = PVector.sub(loc,other.loc);
+        diff.normalize();
+        direction.add(diff);
+        direction.normalize();//所以run完要update,update完要render,run完还要check life.
+        velo=direction.mult(ve);
+        velo.limit(maxspeed);
+      }
+      if(d<=10){
+        life=false;
+      }
+  }
+ }
+   void render(PImage b){
+     if(life==true){
+     asheep=b;
+     image(asheep,loc.x,loc.y);}
+   }
+}
