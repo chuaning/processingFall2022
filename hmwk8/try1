@@ -1,0 +1,140 @@
+float mumationrate;
+int sheeppopulation=50;
+int wolfpopulation=10;
+PImage asheep;
+PImage awolf;
+PImage asheep1;
+PImage awolf1;
+
+ArrayList<DNA> spmatingPool;
+ArrayList<DNA> wfmatingPool;
+ArrayList<DNA> spchildren;
+ArrayList<DNA> wfchildren;
+ArrayList<sheep>sheeps;
+ArrayList<wolf>wolves;
+ArrayList<sheep>sheepchildren;
+ArrayList<wolf>wolfchildren;
+//sppopulation = new DNA[100];
+
+//wfpopulation = new DNA[50];
+
+void reset(){
+  //initialize();
+  //ArrayList<sheep>sheeps;
+  sheeps=new ArrayList();
+  for(int i=0;i<sheeppopulation;i++){
+    sheep mysheep=new sheep();
+    sheeps.add(mysheep);
+    
+  }
+  //ArrayList<wolf>wolves;
+  wolves=new ArrayList();
+  for(int i=0;i<wolfpopulation;i++){
+    wolf mywolf=new wolf();
+    wolves.add(mywolf);
+  }
+}
+void setup(){
+  size(1800,900);
+  asheep=loadImage("asheep.png");
+  awolf=loadImage("awolf.png");
+  asheep1=loadImage("sheep1.png");
+  awolf1=loadImage("awolf.png");
+  reset();
+  //reproduct();
+  //race();
+}
+void draw(){
+ fill(0,255,200);
+ rect(0,0,width,height);
+  //reset();
+  race();
+  reproduct();
+}
+void race(){
+ // reset();
+ println(wolves.size());//10
+  for (int i = 0; i < wolves.size(); i++) {
+    wolf mw = (wolf)wolves.get(i);
+    mw.run(sheeps);
+    mw.update();
+    mw.render(awolf);
+  }
+  //float veall=0;
+  for (int i = 0; i < sheeps.size(); i++) {
+    sheep ms = (sheep)sheeps.get(i);
+    ms.run(wolves);
+    ms.update();
+    //veall=+ms.ve;
+    if(ms.ve>3)
+    ms.render(asheep1);
+    ms.render(asheep);
+  }
+   
+}
+void reproduct(){
+  spmatingPool=new ArrayList();
+  wfmatingPool=new ArrayList();
+  for(int i=0;i<sheeppopulation;i++){
+    sheep mysh=(sheep)sheeps.get(i);
+    DNA dna=new DNA(mysh.ve,mysh.fitness,mysh.life);
+    if(mysh.life){spmatingPool.add(dna); }
+  }
+  spchildren=new ArrayList();
+ // float allvel=0;
+  for(int i=0;i<sheeppopulation;i++){
+    int a=int(random(spmatingPool.size()));
+    int b=int(random(spmatingPool.size()));
+    
+    DNA parenta=(DNA)spmatingPool.get(a);
+    DNA parentb=(DNA)spmatingPool.get(b);
+    float vel=(parenta.vegene+parentb.vegene)/2;
+    
+    DNA child=new DNA(vel,1.0,true);
+    child.mutate();
+    //allvel=+vel;
+    spchildren.add(child);
+
+}
+//println(allvel/spmatingPool.size());
+
+wfchildren=new ArrayList();
+  for(int i=0;i<wolfpopulation;i++){
+    wolf mywf=(wolf)wolves.get(i);
+    DNA dna=new DNA(mywf.ve,mywf.fitness,mywf.life);
+    if(mywf.life){wfmatingPool.add(dna); }
+  }
+for(int i=0;i<wolfpopulation;i++){
+    int a=int(random(wfmatingPool.size()));
+    int b=int(random(wfmatingPool.size()));
+    //println(wfmatingPool.size(),b);//0???
+    DNA parenta=(DNA)wfmatingPool.get(a);
+    DNA parentb=(DNA)wfmatingPool.get(b);
+    float vel=(parenta.vegene+parentb.vegene)/2;
+    DNA child=new DNA(vel,1.0,true);
+    child.mutate();
+    
+    wfchildren.add(child);
+}
+println(spmatingPool.size());
+//把孩子的dna数据给族群
+ if(spmatingPool.size()<=30){
+      
+      sheepchildren=new ArrayList();
+      wolfchildren=new ArrayList();
+  for(int i=0;i<sheeppopulation;i++){
+      DNA ab=(DNA)spchildren.get(i);
+      float vel=ab.vegene;
+      sheep mysh=new sheep(vel);
+      sheepchildren.add(mysh);
+  }
+  for(int i=0;i<wolfpopulation;i++){
+      DNA ab=(DNA)wfchildren.get(i);
+      float vel=ab.vegene;
+      wolf mywf=new wolf(vel);
+      wolfchildren.add(mywf);
+  }
+  sheeps=(ArrayList<sheep>) sheepchildren.clone();
+  wolves=(ArrayList<wolf>) wolfchildren.clone();
+}
+}
