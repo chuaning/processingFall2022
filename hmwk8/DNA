@@ -1,0 +1,31 @@
+class DNA{
+  float vegene;
+  boolean life;
+  float fitness;
+  float muterate=0.1;
+  
+  //DNA child;//在类里面定义还是类外面？outside
+  DNA(){
+    vegene=random(2,3);
+    life=true;
+    checklife();
+  }
+  DNA(float vel,float fit,boolean lif)
+  {
+    vegene=vel;
+    fitness=fit;
+    life=lif;
+  }
+  void checklife(){
+    if(vegene<=0)life=false;
+  }
+  void checkfitness(){
+    if(life==false)fitness=0;
+  }
+
+  void mutate(){
+    if(random(1)<muterate){
+      vegene=+random(-0.5,0.5);
+    }
+  }
+}
