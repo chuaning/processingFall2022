@@ -1,0 +1,93 @@
+class wolf{
+  PVector loc;
+  float ve;//速度大小
+  PVector direction;
+  PVector velo;//速度向量
+  float r=140;
+  float maxspeed=10;
+  float fitness=1;
+  //color colorball;
+ // float lifespan=500;
+  boolean life;
+  PImage awolf;
+  wolf(float vel){
+    ve=vel;
+    initial();
+  }
+  wolf(){
+    ve=random(2,3);
+    life=true;
+    loc=new PVector(random(width),random(height));
+    direction=new PVector(sin(random(2*PI)),cos(random(2*PI)));
+    velo=new PVector(0,0);
+    direction.normalize();
+    velo=direction.mult(ve);
+    velo.limit(maxspeed);
+  }
+  void initial(){
+    life=true;
+    loc=new PVector(random(width),random(height));
+    direction=new PVector(sin(random(2*PI)),cos(random(2*PI)));
+    velo=new PVector(sin(random(2*PI)),cos(random(2*PI)));
+    direction.normalize();
+    velo=direction.mult(ve);
+    velo.limit(maxspeed);
+  }
+  void update(){
+   // velo.limit(maxspeed);
+    if(life==true){
+    //velo=direction.mult(ve);
+    
+    loc.add(velo);
+    borders();
+    }
+    else{fitness=0;}
+    velo.limit(maxspeed);
+  }
+   void borders() {
+    if (loc.x + r < 0) {
+      loc.x = width + r; 
+      //vel.x*=-1;
+    }
+    if (loc.y + r < 0) {
+      loc.y = height + r; 
+      //vel.y*=-1;
+    }
+    if (loc.x - r > width) {
+      loc.x = - r; 
+      //vel.x*=-1;
+    }
+    if (loc.y - r > height) {
+      loc.y = -r; 
+      //vel.y*=-1;
+    }
+  }
+  void run(ArrayList sheeps){
+    float desiredseparation = r;
+    float a=r;
+    sheep thesheep=new sheep();
+    //PVector steer = new PVector(0,0,0);
+    for (int i = 0 ; i < sheeps.size(); i++) {
+      sheep other=(sheep)sheeps.get(i);
+      float d = PVector.dist(loc,other.loc);
+      if(d<a){a=d;thesheep=other;}
+    }
+  
+      if ((a > 0) && (a < desiredseparation)&&thesheep.life) {
+        PVector diff = PVector.sub(thesheep.loc,loc);
+        diff.normalize();
+        direction.add(diff);
+        direction.add(diff);
+        direction.normalize();//所以run完要update,update完要render
+        velo=direction.mult(ve);
+        velo.limit(maxspeed);
+      }
+      if(a<=10){fitness=+1;}
+  
+ }
+  void render(PImage a){
+    if(life==true){
+    awolf=a;
+    image(awolf,loc.x,loc.y);}
+  }
+}
