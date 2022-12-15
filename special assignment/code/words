@@ -1,0 +1,79 @@
+class Words{
+  PVector loc, vel, acc;
+  int lifeSpan, passedLife;
+  boolean dead;
+  float alpha, weight, weightRange, decay, xOfst, yOfst;
+  color c=color(100,100,100);
+  
+  Words(float x, float y, /*float xOfst, float yOfst,*/color cc){
+    loc = new PVector(x, y);
+    
+    float randDegrees = random(360);
+    vel = new PVector(cos(radians(randDegrees)), sin(radians(randDegrees)));
+    vel.mult(random(2));
+    
+    acc = new PVector(0,0);
+    lifeSpan = int(random(30, 90));
+    decay = random(0.75, 0.9);
+    c = cc;
+    weightRange = random(3,50);
+    
+    this.xOfst = xOfst;
+    this.yOfst = yOfst;
+  }
+  
+  void update(){
+    if(passedLife>=lifeSpan){
+      dead = true;
+    }else{
+      passedLife++;
+    }
+    alpha = float(lifeSpan-passedLife)/lifeSpan * 70+50;
+    weight = float(lifeSpan-passedLife)/lifeSpan * weightRange;
+    
+    acc.set(0,0);
+    
+    //float rn =map(noise((loc.x+loc.y/*+yOfst*/)),0,1,0,2*PI);
+    float rn =random(0,2*PI);
+    float mag = noise((loc.y-frameCount)*.1, (loc.x-frameCount)*.1);
+    PVector dir = new PVector(cos(rn),sin(rn));
+    acc.add(dir);
+    acc.mult(mag);
+    
+    float randRn = random(TWO_PI);
+    PVector randV = new PVector(cos(randRn), sin(randRn));
+    randV.mult(.75);
+    acc.add(randV);
+    
+    vel.add(acc);
+    vel.mult(decay);
+    vel.limit(2);
+    loc.add(vel);
+  }
+  void display(){
+    strokeWeight(weight+1.5);
+    stroke(0, alpha);
+    point(loc.x, loc.y);
+    
+    strokeWeight(weight);
+    stroke(c);
+    point(loc.x, loc.y);
+  }
+   void borders() {
+    if (loc.x  < 100) {
+      //loc.x = width ; 
+      vel.x*=-1;
+    }
+    if (loc.y < 50) {
+      //loc.y = height ; 
+      vel.y*=-1;
+    }
+    if (loc.x  > width-100) {
+      //loc.x = 0; 
+      vel.x*=-1;
+    }
+    if (loc.y > height-50) {
+      //loc.y = 0; 
+      vel.y*=-1;
+    }}
+}
