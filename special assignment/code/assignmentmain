@@ -18,12 +18,17 @@ String[] textfieldNames = {"Title", "keywords"};
 String text1,text2;
 Words a,b;
 int[] colors = new int[]{#75b9bf,#696d7d,#d72638,#f49d37,#140f2d};
+color colorss[];
 //int[] colors = new int[]{#75b9be};
 ArrayList<drip> rain = new ArrayList<drip>();
 PFont font;
+int changeinkcolor=0;
 int colorletterr=255;
 int colorletterg=255;
 int colorletterb=255;
+int colorletterr1=255;
+int colorletterg1=255;
+int colorletterb1=255;
 void setup() {
   fullScreen();
   smooth();
@@ -36,6 +41,9 @@ void setup() {
   bar.addSlider("colorletterr", 0, 255, 1.0, canvasLeftCornerX, canvasLeftCornerY, barWidth, 20);
   bar.addSlider("colorletterg", 0, 255, 1.0, canvasLeftCornerX, canvasLeftCornerY+40, barWidth, 20);
   bar.addSlider("colorletterb", 0, 255, 1.0, canvasLeftCornerX, canvasLeftCornerY+80, barWidth, 20);
+  bar.addSlider("colorletterr1", 0, 255, 1.0, canvasLeftCornerX, canvasLeftCornerY+150, barWidth, 20);
+  bar.addSlider("colorletterg1", 0, 255, 1.0, canvasLeftCornerX, canvasLeftCornerY+190, barWidth, 20);
+  bar.addSlider("colorletterb1", 0, 255, 1.0, canvasLeftCornerX, canvasLeftCornerY+230, barWidth, 20);
   //bar.setAutoDraw(false);
   
   //surface.setTitle(name[0]);//title string
@@ -116,6 +124,10 @@ void drawletter(PImage p1){
        p.displayimage();
     }
   }
+  //for(int i=ptsw.size()-1; i>=0; i--){
+  //    ptsw.remove(i);
+  //    //ptsw.remove(i);
+  //  }
  
   }
 }
@@ -176,7 +188,7 @@ void controlEvent(ControlEvent theEvent) {
     PFont f;
   a.update();
   a.borders();
-  f = createFont("serif", 200);  //name of new font and the size
+  f = createFont("serif", 200);  
   textFont(f);
   fill(0,100,100);
   //if(a.dead==false)
