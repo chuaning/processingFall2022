@@ -1,0 +1,54 @@
+class drip{
+  ArrayList<pointer> splat;
+  int colora;
+  float x;
+  float y;
+  float death;
+  float extent;
+  float noiseStart;
+
+  drip(float ox,float oy,float oextent,int[] c){
+    splat = new ArrayList<pointer>();
+    colora = color(c[int(random(c.length))]);
+    x=ox;
+    y=oy;
+    death=500;
+    extent=oextent;
+    noiseStart=random(TWO_PI);
+    for(float i = noiseStart; i<noiseStart+TWO_PI; i+=0.1){
+      float acc= (noise(i));
+      this.splat.add(new pointer(i, acc, extent));
+    }  
+  }
+  
+  
+ void move(){
+   
+   for(int n=0;n<splat.size();n++){
+     splat.get(n).move();
+   }
+  death-=1;
+ if(death<1){
+      rain.remove(rain.indexOf(this));
+   }
+ } 
+ 
+ void show(){
+   
+    String s = hex(colora,6);
+    int r = Integer.parseInt(s.substring(0,2),16);
+    int g = Integer.parseInt(s.substring(2,4),16);
+    int b = Integer.parseInt(s.substring(4,6),16);
+    color ne=color(r,g,b,70);
+    colora = ne;
+    fill(colora);
+    push();
+    translate(x, y);
+    beginShape();
+    for(int i=0; i<splat.size(); i++){
+      curveVertex(splat.get(i).pos.x, splat.get(i).pos.y);
+    }
+    endShape(CLOSE);
+    pop() ;
+   }
+}
