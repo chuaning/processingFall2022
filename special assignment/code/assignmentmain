@@ -1,0 +1,246 @@
+import controlP5.*;
+import toxi.geom.*;
+import toxi.geom.mesh2d.*;
+import toxi.processing.*;
+ArrayList<Particle> pts,ptsw;
+boolean onPressed, showInstruction = true;
+PFont f;
+PImage pA,pB,pC,pD,pE,pF,pG,pH,pI,pJ,pK,pL,pM,pN,pO,pP,pQ,pR,pS,pT,pU,pV,pW,pX,pY,pZ;
+boolean imageparticle=false;
+boolean clear=false;
+int numberofparticle=2;
+ControlP5 cp5,bar;
+ToxiclibsSupport gfx;
+int canvasLeftCornerX = 40;
+int canvasLeftCornerY = 400;
+int barWidth = 150;
+String[] textfieldNames = {"Title", "keywords"};
+String text1,text2;
+Words a,b;
+int[] colors = new int[]{#75b9bf,#696d7d,#d72638,#f49d37,#140f2d};
+//int[] colors = new int[]{#75b9be};
+ArrayList<drip> rain = new ArrayList<drip>();
+PFont font;
+int colorletterr=255;
+int colorletterg=255;
+int colorletterb=255;
+void setup() {
+  fullScreen();
+  smooth();
+  colorMode(RGB);
+  rectMode(CENTER);
+  input();
+  gfx = new ToxiclibsSupport(this);
+
+  bar = new ControlP5(this);
+  bar.addSlider("colorletterr", 0, 255, 1.0, canvasLeftCornerX, canvasLeftCornerY, barWidth, 20);
+  bar.addSlider("colorletterg", 0, 255, 1.0, canvasLeftCornerX, canvasLeftCornerY+40, barWidth, 20);
+  bar.addSlider("colorletterb", 0, 255, 1.0, canvasLeftCornerX, canvasLeftCornerY+80, barWidth, 20);
+  //bar.setAutoDraw(false);
+  
+  //surface.setTitle(name[0]);//title string
+  pts = new ArrayList<Particle>();
+  ptsw = new ArrayList<Particle>();
+
+  f = createFont("Calibri", 24, true);
+  initialwords();
+  pA=loadImage("A.png");
+  pB=loadImage("B.png");
+  pC=loadImage("C.png");
+  pD=loadImage("D.png");
+  pE=loadImage("E.png");
+  pF=loadImage("F.png");
+  pG=loadImage("G.png");
+  pH=loadImage("H.png");
+  pI=loadImage("I.png");
+  pJ=loadImage("J.png");
+  pK=loadImage("K.png");
+  pL=loadImage("L.png");
+  pM=loadImage("M.png");
+  pN=loadImage("N.png");
+  pO=loadImage("O.png");
+  pP=loadImage("P.png");
+  pQ=loadImage("Q.png");
+  pR=loadImage("R.png");
+  pS=loadImage("S.png");
+  pT=loadImage("T.png");
+  pU=loadImage("U.png");
+  pV=loadImage("V.png");
+  pW=loadImage("W.png");
+  pX=loadImage("X.png");
+  pY=loadImage("Y.png");
+  pZ=loadImage("Z.png");
+ // pA.resize(50,50);
+  //background(186,186,186);
+}
+
+void draw() {
+  //if(showinstruction)drawInstruction();
+  if(text1!=null)showwords(text1);
+  //if(text2==null)drawparticle();
+ 
+  if(text2!=null)showkeywords();
+  drawink();
+}
+void drawparticle(){
+  for (int i=0;i<numberofparticle;i++) {
+    
+      Particle newP = new Particle(mouseX, mouseY, i+pts.size(), i+pts.size());
+      pts.add(newP);
+    }
+  //}
+   
+
+  for (int i=pts.size()-1; i>-1; i--) {
+    Particle p = pts.get(i);
+    if (p.dead) {
+      pts.remove(i);
+    }else{
+      p.update();
+       p.display();
+    }
+  }}
+void drawletter(PImage p1){
+  if(imageparticle) {
+    for (int i=0;i<numberofparticle;i++) {
+      
+      Particle newP = new Particle(mouseX, mouseY, i+ptsw.size(), i+ptsw.size(),p1);
+      ptsw.add(newP);
+    }
+     for (int i=ptsw.size()-1; i>-1; i--) {
+    Particle p = ptsw.get(i);
+    if (p.dead) {
+      ptsw.remove(i);
+    }else{
+      p.update();
+       p.displayimage();
+    }
+  }
+ 
+  }
+}
+void drawInstruction(){
+  background(255);
+  fill(128);
+  textAlign(CENTER, CENTER);
+  textFont(f);
+  textLeading(36);
+  text("Drag and draw." + "\n" +
+       "Press 'c' to clear the stage." + "\n"
+       ,width*0.5, height*0.5);
+}
+void input(){
+ PFont font = createFont("YaHei Consolas Hybrid",20);
+
+  cp5 = new ControlP5(this);
+
+  int y = 60;
+  int spacing = 100;
+  for(String name: textfieldNames){
+    cp5.addTextfield(name)
+       .setPosition(30,y)
+       .setSize(200,40)
+       .setFont(font)
+       .setFocus(true)
+       .setColor(color(220,97,20))
+       ;
+     y += spacing;
+  }
+
+  textFont(font); 
+}
+void controlEvent(ControlEvent theEvent) {
+  if(theEvent.isAssignableFrom(Textfield.class)) {
+    println("controlEvent: accessing a string from controller '"
+            +theEvent.getName()+"': "
+            +theEvent.getStringValue()
+            );
+    if(theEvent.getName()=="Title"){text1=theEvent.getStringValue();}
+    if(theEvent.getName()=="keywords"){
+      //clearletter();
+      imageparticle=true;
+        text2=theEvent.getStringValue();}
+  }
+}
+
+  void initialwords(){
+   
+   float x=width/3;
+   float y=height/3;
+   //Words a;
+  color c=color(2,255,255);
+  a=new Words(x,y,c);
+}
+  
+  void showwords(String text1){
+    PFont f;
+  a.update();
+  a.borders();
+  f = createFont("serif", 200);  //name of new font and the size
+  textFont(f);
+  fill(0,100,100);
+  //if(a.dead==false)
+  text(text1, a.loc.x, a.loc.y);
+   }
+   
+   
+void showkeywords(){
+ 
+  for(int i=0;i<text2.length();i++){
+    char ch=text2.charAt(i);
+    if(ch=='A'||ch=='a') drawletter(pA);//print(ch," ",ch);}
+    if(ch=='B'||ch=='b') drawletter(pB);
+    if(ch=='C'||ch=='c') drawletter(pC);
+    if(ch=='D'||ch=='d') drawletter(pD);
+    if(ch=='E'||ch=='e') drawletter(pE);
+    if(ch=='F'||ch=='f') drawletter(pF);
+    if(ch=='G'||ch=='g') drawletter(pG);
+    if(ch=='H'||ch=='h') drawletter(pH);
+    if(ch=='I'||ch=='i') drawletter(pI);
+    if(ch=='J'||ch=='j') drawletter(pJ);
+    if(ch=='K'||ch=='k') drawletter(pK);
+    if(ch=='L'||ch=='l') drawletter(pL);
+    if(ch=='M'||ch=='m') drawletter(pM);
+    if(ch=='N'||ch=='n') drawletter(pN);
+    if(ch=='O'||ch=='o') drawletter(pO);
+    if(ch=='P'||ch=='p') drawletter(pP);
+    if(ch=='Q'||ch=='q') drawletter(pQ);
+    if(ch=='R'||ch=='r') drawletter(pR);
+    if(ch=='S'||ch=='s') drawletter(pS);
+    if(ch=='T'||ch=='t') drawletter(pT);
+    if(ch=='U'||ch=='u') drawletter(pU);
+    if(ch=='V'||ch=='v') drawletter(pV);
+    if(ch=='W'||ch=='w') drawletter(pW);
+    if(ch=='X'||ch=='x') drawletter(pX);
+    if(ch=='Y'||ch=='y') drawletter(pY);
+    if(ch=='Z'||ch=='z') drawletter(pZ);
+  }
+}
+void drawink(){
+  if(frameCount==1){
+    delay(1000);
+  }
+  else{
+    if(frameCount%2==0){
+      rain.add(new drip(random(width), random(-100, height), random(5,30), colors));
+      noStroke();
+      fill(color(0xf0,0xea,0xd6,10));
+      rect(0,0,2*width,2*height);
+      
+    }
+    for(int i=rain.size()-1; i>=0; i--){
+      rain.get(i).move();
+      rain.get(i).show();
+    }
+  }
+}
+/*void changecolor(PImage p0){
+  color c;
+  float x,y;
+ for(int i=0;i<50;i++){
+   for(int j=0;j<50;j++){
+     
+   c=p0.pixels[50*i+j];
+   
+ }}
+}*/
