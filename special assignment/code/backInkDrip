@@ -34,14 +34,18 @@ class drip{
  } 
  
  void show(){
-   
+   color ne;
+   if(changeinkcolor%2==0){
     String s = hex(colora,6);
     int r = Integer.parseInt(s.substring(0,2),16);
     int g = Integer.parseInt(s.substring(2,4),16);
     int b = Integer.parseInt(s.substring(4,6),16);
-    color ne=color(r,g,b,70);
+    ne=color(r,g,b,70);}
+    else
+    ne=color(colorletterr1,colorletterg1,colorletterb1,70);
     colora = ne;
     fill(colora);
+   // tint(colorletterr,colorletterg,colorletterb);
     push();
     translate(x, y);
     beginShape();
