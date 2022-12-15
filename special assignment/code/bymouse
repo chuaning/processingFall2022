@@ -16,6 +16,7 @@ void keyPressed() {
       Particle p = pts.get(i);
       pts.remove(i);
     }
+    changeinkcolor++;
     showInstruction = false;
     background(186,186,186);
   }
