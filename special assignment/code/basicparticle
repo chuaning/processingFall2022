@@ -1,0 +1,88 @@
+class Particle{
+  PVector loc, vel, acc;
+  int lifeSpan, passedLife;
+  boolean dead;
+  float alpha, weight, weightRange, decay, xOfst, yOfst;
+  color c;
+  PImage p1;
+  int size=20;
+  //float a=noise(1);
+  Particle(float x, float y, float xOfst, float yOfst){
+    loc = new PVector(x, y);
+    
+    float randDegrees = random(360);
+    vel = new PVector(cos(radians(randDegrees)), sin(radians(randDegrees)));
+    vel.mult(random(5));
+    
+    acc = new PVector(0,0);
+    lifeSpan = int(random(30, 90));
+    decay = random(0.75, 0.9);
+    c = color(random(255),random(255),255);
+    weightRange = random(3,50);
+    
+    this.xOfst = xOfst;
+    this.yOfst = yOfst;
+  }
+ Particle(float x, float y, float xOfst, float yOfst,PImage pi){
+    loc = new PVector(x, y);
+    p1=pi;
+    float randDegrees = random(360);
+    vel = new PVector(cos(radians(randDegrees)), sin(radians(randDegrees)));
+    vel.mult(random(5));
+    
+    acc = new PVector(0,0);
+    lifeSpan = int(random(30, 90));
+    decay = random(0.75, 0.9);
+    c = color(random(255),random(255),255);
+    weightRange = random(3,50);
+    
+    this.xOfst = xOfst;
+    this.yOfst = yOfst;
+  }
+  void update(){
+    if(passedLife>=lifeSpan){
+      dead = true;
+    }else{
+      passedLife++;
+    }
+    
+    alpha = float(lifeSpan-passedLife)/lifeSpan * 70+50;
+    weight = float(lifeSpan-passedLife)/lifeSpan * weightRange;
+    
+    acc.set(0,0);
+    
+    float rn = (noise((loc.x+frameCount+xOfst)*.01, (loc.y+frameCount+yOfst)*.01)-.5)*TWO_PI*4;
+    float mag = noise((loc.y-frameCount)*.01, (loc.x-frameCount)*.01);
+    PVector dir = new PVector(cos(rn),sin(rn));
+    acc.add(dir);
+    acc.mult(mag);
+    
+    float randRn = random(TWO_PI);
+    PVector randV = new PVector(cos(randRn), sin(randRn));
+    randV.mult(.25);
+    acc.add(randV);
+    
+    vel.add(acc);
+    vel.mult(decay);
+    vel.limit(3);
+    loc.add(vel);
+  }
+  
+  void display(){
+    strokeWeight(weight/*+1.5*/);
+    stroke(0, alpha);
+    point(loc.x, loc.y);
+    
+    strokeWeight(weight);
+    //print(ceil(weight)," ");
+    stroke(c/2);
+    point(loc.x, loc.y);
+  }
+  void displayimage(){
+    //p1.resize(ceil(weight)+1,ceil(weight)+1);
+    PImage p2=p1;
+    tint(colorletterr,colorletterg,colorletterb);
+    image(p2,loc.x,loc.y);
+    // filter(BLUR);不能加，卡爆了，除非刚开始给图片改颜色
+  }
+}
